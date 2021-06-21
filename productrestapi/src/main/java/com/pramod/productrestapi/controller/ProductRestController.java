@@ -3,6 +3,9 @@ package com.pramod.productrestapi.controller;
 import com.pramod.productrestapi.entities.Product;
 import com.pramod.productrestapi.repos.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,6 +22,8 @@ public class ProductRestController {
     }
 
     @GetMapping(value = "/products/{id}")
+    @Transactional(readOnly = true)
+    @Cacheable("product-cache")
     public Product getProduct(@PathVariable("id") int id) {
         return productRepository.findById(id).get(); // Optional
     }
@@ -34,6 +39,7 @@ public class ProductRestController {
     }
 
     @DeleteMapping(value = "/products/{id}")
+    @CacheEvict("product-cache")
     public void deleteProduct(@PathVariable("id") int id) {
         productRepository.deleteById(id);
     }
