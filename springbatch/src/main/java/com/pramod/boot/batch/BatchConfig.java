@@ -30,10 +30,10 @@ public class BatchConfig {
     @Bean
     public Step step() {
         return sbf.get("step1")
-                  .<String, String>chunk(1)
+                  .<String, String>chunk(3)
                   .reader(reader()).processor(processor())
                   .writer(writer())
-                  .build();
+                  .build(); // chunk size changes how many times it read. so here it goes inside Read 3 and writes once
     }
 
     @Bean
