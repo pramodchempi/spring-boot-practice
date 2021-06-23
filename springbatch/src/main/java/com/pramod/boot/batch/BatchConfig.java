@@ -18,6 +18,7 @@ public class BatchConfig {
     @Autowired
     private JobBuilderFactory jbf;
 
+    @Bean
     public Job job() {
         return jbf.get("job1")
                   .incrementer(new RunIdIncrementer())
@@ -29,9 +30,8 @@ public class BatchConfig {
     @Bean
     public Step step() {
         return sbf.get("step1")
-                  .<String,String>chunk(1)
-                  .reader(reader())
-                  .processor(processor())
+                  .<String, String>chunk(1)
+                  .reader(reader()).processor(processor())
                   .writer(writer())
                   .build();
     }
@@ -45,6 +45,7 @@ public class BatchConfig {
     public Writer writer() {
         return new Writer();
     }
+
     @Bean
     public Processor processor() {
         return new Processor();
